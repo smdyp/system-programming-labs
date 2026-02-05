@@ -1,0 +1,110 @@
+=== Отчет диагностики процессов ===
+Дата и время: Thu Feb  5 15:45:30 +05 2026
+Пользователь: smd
+
+1. Процессы пользователя smd:
+========================================
+    324     323 -bash                        0.0  0.1 Ss
+    369       1 /usr/lib/systemd/systemd --  0.0  0.2 Ss
+    372     369 (sd-pam)                     0.0  0.0 S
+    388     325 -bash                        0.0  0.1 S+
+   2050     324 /bin/bash ./diagnose.sh      0.0  0.0 S+
+   2056    2050 ps -u smd -o pid,ppid,cmd,%  0.0  0.0 R+
+   2057    2050 head -20                     0.0  0.0 S+
+   2058    2050 tee -a report.txt            0.0  0.0 R+
+
+PID текущего shell: 2050
+
+2. Топ-5 процессов по использованию CPU:
+========================================
+top - 15:45:30 up  1:04,  1 user,  load average: 0.04, 0.01, 0.00
+Tasks:  27 total,   1 running,  26 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :   3917.7 total,   3377.1 free,    454.2 used,    228.2 buff/cache     
+MiB Swap:   1024.0 total,   1024.0 free,      0.0 used.   3463.5 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+      1 root      20   0   21692  12760   9432 S   0.0   0.3   0:00.58 systemd
+      2 root      20   0    3120   2176   2048 S   0.0   0.1   0:00.04 init-sy+
+      9 root      20   0    3120   1792   1792 S   0.0   0.0   0:00.00 init
+     42 root      19  -1   66832  19128  18104 S   0.0   0.5   0:00.35 systemd+
+     94 root      20   0   25408   6528   4864 S   0.0   0.2   0:00.65 systemd+
+    120 systemd+  20   0   21460  12672  10496 S   0.0   0.3   0:00.08 systemd+
+    127 systemd+  20   0   91028   7680   6784 S   0.0   0.2   0:00.09 systemd+
+    150 root      20   0    4236   2560   2304 S   0.0   0.1   0:00.01 cron
+
+3. Карта памяти процесса 2050 (bash):
+========================================
+572e8d47e000-572e8d4ae000 r--p 00000000 08:30 1470                       /usr/bin/bash
+572e8d4ae000-572e8d59d000 r-xp 00030000 08:30 1470                       /usr/bin/bash
+572e8d59d000-572e8d5d2000 r--p 0011f000 08:30 1470                       /usr/bin/bash
+572e8d5d2000-572e8d5d6000 r--p 00154000 08:30 1470                       /usr/bin/bash
+572e8d5d6000-572e8d5df000 rw-p 00158000 08:30 1470                       /usr/bin/bash
+572e8d5df000-572e8d5ea000 rw-p 00000000 00:00 0 
+572eaee60000-572eaee81000 rw-p 00000000 00:00 0                          [heap]
+7a32341a7000-7a3234200000 r--p 00000000 08:30 12233                      /usr/lib/locale/C.utf8/LC_CTYPE
+7a3234200000-7a3234228000 r--p 00000000 08:30 38872                      /usr/lib/x86_64-linux-gnu/libc.so.6
+7a3234228000-7a32343b0000 r-xp 00028000 08:30 38872                      /usr/lib/x86_64-linux-gnu/libc.so.6
+7a32343b0000-7a32343ff000 r--p 001b0000 08:30 38872                      /usr/lib/x86_64-linux-gnu/libc.so.6
+7a32343ff000-7a3234403000 r--p 001fe000 08:30 38872                      /usr/lib/x86_64-linux-gnu/libc.so.6
+7a3234403000-7a3234405000 rw-p 00202000 08:30 38872                      /usr/lib/x86_64-linux-gnu/libc.so.6
+7a3234405000-7a3234412000 rw-p 00000000 00:00 0 
+7a3234436000-7a3234437000 r--p 00000000 08:30 12239                      /usr/lib/locale/C.utf8/LC_NUMERIC
+7a3234437000-7a3234438000 r--p 00000000 08:30 12242                      /usr/lib/locale/C.utf8/LC_TIME
+7a3234438000-7a3234439000 r--p 00000000 08:30 12232                      /usr/lib/locale/C.utf8/LC_COLLATE
+7a3234439000-7a323443a000 r--p 00000000 08:30 12237                      /usr/lib/locale/C.utf8/LC_MONETARY
+7a323443a000-7a3234441000 r--s 00000000 08:30 38763                      /usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache
+7a3234441000-7a3234444000 rw-p 00000000 00:00 0 
+7a3234444000-7a3234452000 r--p 00000000 08:30 13077                      /usr/lib/x86_64-linux-gnu/libtinfo.so.6.4
+7a3234452000-7a3234465000 r-xp 0000e000 08:30 13077                      /usr/lib/x86_64-linux-gnu/libtinfo.so.6.4
+7a3234465000-7a3234473000 r--p 00021000 08:30 13077                      /usr/lib/x86_64-linux-gnu/libtinfo.so.6.4
+7a3234473000-7a3234477000 r--p 0002e000 08:30 13077                      /usr/lib/x86_64-linux-gnu/libtinfo.so.6.4
+7a3234477000-7a3234478000 rw-p 00032000 08:30 13077                      /usr/lib/x86_64-linux-gnu/libtinfo.so.6.4
+7a3234478000-7a3234479000 r--p 00000000 08:30 12236                      /usr/lib/locale/C.utf8/LC_MESSAGES/SYS_LC_MESSAGES
+7a3234479000-7a323447a000 r--p 00000000 08:30 12240                      /usr/lib/locale/C.utf8/LC_PAPER
+7a323447a000-7a323447b000 r--p 00000000 08:30 12238                      /usr/lib/locale/C.utf8/LC_NAME
+7a323447b000-7a323447c000 r--p 00000000 08:30 12231                      /usr/lib/locale/C.utf8/LC_ADDRESS
+7a323447c000-7a323447d000 r--p 00000000 08:30 12241                      /usr/lib/locale/C.utf8/LC_TELEPHONE
+
+4. Открытые файлы процесса 2050:
+========================================
+COMMAND    PID USER   FD   TYPE DEVICE SIZE/OFF              NODE NAME
+diagnose. 2050  smd  cwd    DIR   0,70     4096 11258999068501156 /mnt/c/Users/SMD/Documents/GitHub/system-programming-labs/practice-1/1-4
+diagnose. 2050  smd  rtd    DIR   8,48     4096                 2 /
+diagnose. 2050  smd  txt    REG   8,48  1446024              1470 /usr/bin/bash
+diagnose. 2050  smd  mem    REG   8,48   360460             12233 /usr/lib/locale/C.utf8/LC_CTYPE
+diagnose. 2050  smd  mem    REG   8,48  2125328             38872 /usr/lib/x86_64-linux-gnu/libc.so.6
+diagnose. 2050  smd  mem    REG   8,48       50             12239 /usr/lib/locale/C.utf8/LC_NUMERIC
+diagnose. 2050  smd  mem    REG   8,48     3360             12242 /usr/lib/locale/C.utf8/LC_TIME
+diagnose. 2050  smd  mem    REG   8,48     1406             12232 /usr/lib/locale/C.utf8/LC_COLLATE
+diagnose. 2050  smd  mem    REG   8,48      270             12237 /usr/lib/locale/C.utf8/LC_MONETARY
+diagnose. 2050  smd  mem    REG   8,48    27028             38763 /usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache
+diagnose. 2050  smd  mem    REG   8,48   208328             13077 /usr/lib/x86_64-linux-gnu/libtinfo.so.6.4
+diagnose. 2050  smd  mem    REG   8,48       48             12236 /usr/lib/locale/C.utf8/LC_MESSAGES/SYS_LC_MESSAGES
+diagnose. 2050  smd  mem    REG   8,48       34             12240 /usr/lib/locale/C.utf8/LC_PAPER
+diagnose. 2050  smd  mem    REG   8,48       62             12238 /usr/lib/locale/C.utf8/LC_NAME
+diagnose. 2050  smd  mem    REG   8,48      127             12231 /usr/lib/locale/C.utf8/LC_ADDRESS
+diagnose. 2050  smd  mem    REG   8,48       47             12241 /usr/lib/locale/C.utf8/LC_TELEPHONE
+diagnose. 2050  smd  mem    REG   8,48       23             12235 /usr/lib/locale/C.utf8/LC_MEASUREMENT
+diagnose. 2050  smd  mem    REG   8,48      258             12234 /usr/lib/locale/C.utf8/LC_IDENTIFICATION
+diagnose. 2050  smd  mem    REG   8,48   236616             38820 /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+
+5. Информация о процессе из /proc/2050/status:
+========================================
+Name:	diagnose.sh
+State:	S (sleeping)
+Pid:	2050
+PPid:	324
+VmSize:	    4752 kB
+VmRSS:	    3328 kB
+
+6. Информация о сигналах (команда kill):
+========================================
+Примеры сигналов для команды kill:
+  kill -SIGTERM PID  - корректное завершение
+  kill -SIGKILL PID  - принудительное завершение
+  kill -SIGHUP PID   - перезапуск процесса
+
+Отчет сохранен в файл: report.txt
+
+=== Диагностика завершена ===
