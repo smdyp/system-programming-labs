@@ -1,0 +1,279 @@
+# Диагностика сетевых соединений
+
+# 1. Ping для localhost
+ping -c 4 localhost
+
+smd@HOME-PC:/mnt/c/Users/SMD/Documents/Сессия 06.2026/Универ/Универ/4 курс/System_programming_labs/practice-3/3-3$ ping -c 4 localhost
+PING localhost (127.0.0.1) 56(84) bytes of data.
+64 bytes from localhost (127.0.0.1): icmp_seq=1 ttl=64 time=0.039 ms
+64 bytes from localhost (127.0.0.1): icmp_seq=2 ttl=64 time=0.040 ms
+64 bytes from localhost (127.0.0.1): icmp_seq=3 ttl=64 time=0.038 ms
+64 bytes from localhost (127.0.0.1): icmp_seq=4 ttl=64 time=0.046 ms
+
+--- localhost ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3049ms
+rtt min/avg/max/mdev = 0.038/0.040/0.046/0.003 ms
+
+# 2. Статистика сетевых сокетов (ss)
+ss -tuln
+smd@HOME-PC:/mnt/c/Users/SMD/Documents/Сессия 06.2026/Универ/Универ/4 курс/System_programming_labs/practice-3/3-3$ ss -tuln
+Netid           State            Recv-Q           Send-Q                     Local Address:Port                     Peer Address:Port
+udp             UNCONN           0                0                              127.0.0.1:323                           0.0.0.0:*
+udp             UNCONN           0                0                              127.0.0.1:323                           0.0.0.0:*
+udp             UNCONN           0                0                             127.0.0.54:53                            0.0.0.0:*
+udp             UNCONN           0                0                          127.0.0.53%lo:53                            0.0.0.0:*
+udp             UNCONN           0                0                                  [::1]:323                              [::]:*
+udp             UNCONN           0                0                                  [::1]:323                              [::]:*
+tcp             LISTEN           0                4096                          127.0.0.54:53                            0.0.0.0:*
+tcp             LISTEN           0                4096                       127.0.0.53%lo:53                            0.0.0.0:*
+
+ss -tan
+smd@HOME-PC:/mnt/c/Users/SMD/Documents/Сессия 06.2026/Универ/Универ/4 курс/System_programming_labs/practice-3/3-3$ ss -tan
+State              Recv-Q             Send-Q                         Local Address:Port                          Peer Address:Port
+LISTEN             0                  4096                              127.0.0.54:53                                 0.0.0.0:*
+LISTEN             0                  4096                           127.0.0.53%lo:53                                 0.0.0.0:*
+
+ss -tunap
+smd@HOME-PC:/mnt/c/Users/SMD/Documents/Сессия 06.2026/Универ/Универ/4 курс/System_programming_labs/practice-3/3-3$ ss -tunap
+Netid         State          Recv-Q         Send-Q                 Local Address:Port                 Peer Address:Port        Process
+udp           UNCONN         0              0                          127.0.0.1:323                       0.0.0.0:*
+udp           UNCONN         0              0                          127.0.0.1:323                       0.0.0.0:*
+udp           UNCONN         0              0                         127.0.0.54:53                        0.0.0.0:*
+udp           UNCONN         0              0                      127.0.0.53%lo:53                        0.0.0.0:*
+udp           UNCONN         0              0                              [::1]:323                          [::]:*
+udp           UNCONN         0              0                              [::1]:323                          [::]:*
+tcp           LISTEN         0              4096                      127.0.0.54:53                        0.0.0.0:*
+tcp           LISTEN         0              4096                   127.0.0.53%lo:53                        0.0.0.0:*
+
+# 3. Netstat для сетевых подключений
+netstat -tuln
+smd@HOME-PC:/mnt/c/Users/SMD/Documents/Сессия 06.2026/Универ/Универ/4 курс/System_programming_labs/practice-3/3-3$ netstat -tuln
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State      
+tcp        0      0 127.0.0.54:53           0.0.0.0:*               LISTEN
+tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN
+udp        0      0 127.0.0.1:323           0.0.0.0:*
+udp        0      0 127.0.0.1:323           0.0.0.0:*
+udp        0      0 127.0.0.54:53           0.0.0.0:*
+udp        0      0 127.0.0.53:53           0.0.0.0:*
+udp6       0      0 ::1:323                 :::*
+udp6       0      0 ::1:323                 :::*
+
+netstat -an
+smd@HOME-PC:/mnt/c/Users/SMD/Documents/Сессия 06.2026/Универ/Универ/4 курс/System_programming_labs/practice-3/3-3$ netstat -an
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State
+tcp        0      0 127.0.0.54:53           0.0.0.0:*               LISTEN
+tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN
+tcp        0      0 172.25.62.75:51058      172.66.152.176:80       TIME_WAIT
+udp        0      0 127.0.0.1:323           0.0.0.0:*
+udp        0      0 127.0.0.1:323           0.0.0.0:*
+udp        0      0 127.0.0.54:53           0.0.0.0:*
+udp        0      0 127.0.0.53:53           0.0.0.0:*
+udp6       0      0 ::1:323                 :::*
+udp6       0      0 ::1:323                 :::*
+Active UNIX domain sockets (servers and established)
+Proto RefCnt Flags       Type       State         I-Node   Path
+unix  3      [ ]         STREAM     CONNECTED     8595
+unix  2      [ ACC ]     STREAM     LISTENING     4067     /run/polkit/agent-helper.socket
+unix  2      [ ACC ]     STREAM     LISTENING     4068     /run/snapd.socket
+unix  2      [ ACC ]     STREAM     LISTENING     4069     /run/snapd-snap.socket
+unix  2      [ ACC ]     STREAM     LISTENING     4070     /run/systemd/io.systemd.Hostname
+unix  2      [ ACC ]     STREAM     LISTENING     4071     /run/systemd/io.systemd.Login
+unix  2      [ ACC ]     STREAM     LISTENING     3559     /run/WSL/2_interop
+unix  2      [ ACC ]     STREAM     LISTENING     3524     /run/WSL/1_interop
+unix  2      [ ACC ]     SEQPACKET  LISTENING     157      /mnt/wslg/weston-notify.sock
+unix  2      [ ACC ]     STREAM     LISTENING     2315     /run/dbus/system_bus_socket
+unix  3      [ ]         STREAM     CONNECTED     9558     /run/systemd/journal/stdout
+unix  2      [ ACC ]     STREAM     LISTENING     3531     /mnt/wslg/runtime-dir/wayland-0
+unix  2      [ ACC ]     STREAM     LISTENING     3534     /tmp/.X11-unix/X0
+unix  2      [ ACC ]     STREAM     LISTENING     209      /mnt/wslg/runtime-dir/pulse/native
+unix  3      [ ]         STREAM     CONNECTED     293
+unix  2      [ ACC ]     STREAM     LISTENING     242      /mnt/wslg/PulseAudioRDPSource
+unix  2      [ ACC ]     STREAM     LISTENING     2382     /mnt/wslg/PulseAudioRDPSink
+unix  2      [ ]         DGRAM                    7445     /run/user/1000/systemd/notify
+unix  2      [ ACC ]     STREAM     LISTENING     7452     /run/user/1000/systemd/private
+unix  2      [ ]         DGRAM                    136      /var/run/chrony/chronyd.sock
+unix  2      [ ACC ]     STREAM     LISTENING     7454     /run/user/1000/systemd/io.systemd.Manager
+unix  3      [ ]         STREAM     CONNECTED     296
+unix  2      [ ACC ]     STREAM     LISTENING     295      /mnt/wslg/PulseServer
+unix  2      [ ACC ]     STREAM     LISTENING     4949     /run/user/1000/bus
+unix  2      [ ACC ]     STREAM     LISTENING     4952     /run/user/1000/gnupg/S.dirmngr
+unix  2      [ ACC ]     STREAM     LISTENING     4953     /run/user/1000/gnupg/S.gpg-agent.browser
+unix  3      [ ]         STREAM     CONNECTED     247      /mnt/wslg/PulseAudioRDPSink
+unix  2      [ ACC ]     STREAM     LISTENING     4954     /run/user/1000/gnupg/S.gpg-agent.extra
+unix  2      [ ACC ]     STREAM     LISTENING     4955     /run/user/1000/gnupg/S.gpg-agent.ssh
+unix  3      [ ]         STREAM     CONNECTED     212
+unix  2      [ ACC ]     STREAM     LISTENING     4957     /run/user/1000/gnupg/S.gpg-agent
+unix  2      [ ACC ]     STREAM     LISTENING     4959     /run/user/1000/gnupg/S.keyboxd
+unix  2      [ ACC ]     STREAM     LISTENING     4960     /run/user/1000/pk-debconf-socket
+unix  2      [ ACC ]     STREAM     LISTENING     4961     /run/user/1000/snapd-session-agent.socket
+unix  3      [ ]         STREAM     CONNECTED     297      /tmp/dbus-FD1SmSrx1h
+unix  2      [ ACC ]     STREAM     LISTENING     4962     /run/user/1000/openssh_agent
+unix  2      [ ACC ]     STREAM     LISTENING     4977     /run/user/1000/systemd/io.systemd.AskPassword
+unix  3      [ ]         STREAM     CONNECTED     8606
+unix  3      [ ]         STREAM     CONNECTED     288      /tmp/.X11-unix/X0
+unix  2      [ ACC ]     STREAM     LISTENING     181      /tmp/dbus-FD1SmSrx1h
+unix  3      [ ]         DGRAM      CONNECTED     2368     /run/systemd/notify
+unix  2      [ ACC ]     STREAM     LISTENING     2375     /run/systemd/private
+unix  3      [ ]         STREAM     CONNECTED     8605
+unix  2      [ ACC ]     STREAM     LISTENING     2376     /run/systemd/userdb/io.systemd.DynamicUser
+unix  2      [ ACC ]     STREAM     LISTENING     2377     /run/systemd/io.systemd.ManagedOOM
+unix  2      [ ACC ]     STREAM     LISTENING     2378     /run/systemd/io.systemd.Manager
+unix  3      [ ]         STREAM     CONNECTED     6782     /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     6169     /run/dbus/system_bus_socket
+unix  2      [ ]         DGRAM                    1276     /run/systemd/journal/syslog
+unix  2      [ ACC ]     STREAM     LISTENING     1277     /run/systemd/io.systemd.AskPassword
+unix  2      [ ACC ]     STREAM     LISTENING     1278     /run/systemd/io.systemd.Credentials
+unix  3      [ ]         DGRAM      CONNECTED     7449
+unix  3      [ ]         STREAM     CONNECTED     2982     /run/systemd/journal/stdout
+unix  2      [ ACC ]     STREAM     LISTENING     1279     /run/systemd/io.systemd.FactoryReset
+unix  2      [ ACC ]     STREAM     LISTENING     14849    /run/WSL/2860_interop
+unix  3      [ ]         STREAM     CONNECTED     4930
+unix  9      [ ]         DGRAM      CONNECTED     1280     /run/systemd/journal/dev-log
+unix  2      [ ]         DGRAM      CONNECTED     5167
+unix  2      [ ]         DGRAM      CONNECTED     3805
+unix  7      [ ]         DGRAM      CONNECTED     1281     /run/systemd/journal/socket
+unix  3      [ ]         STREAM     CONNECTED     5242
+unix  2      [ ACC ]     STREAM     LISTENING     1282     /run/systemd/journal/stdout
+unix  2      [ ACC ]     STREAM     LISTENING     1283     /run/systemd/io.systemd.MuteConsole
+unix  2      [ ACC ]     STREAM     LISTENING     1284     /run/systemd/resolve/io.systemd.Resolve.Monitor
+unix  2      [ ACC ]     STREAM     LISTENING     1285     /run/systemd/resolve/io.systemd.Resolve
+unix  3      [ ]         STREAM     CONNECTED     15871    /run/systemd/journal/stdout
+unix  2      [ ]         STREAM     CONNECTED     5331     /run/WSL/2_interop
+unix  3      [ ]         DGRAM      CONNECTED     7450
+unix  2      [ ]         DGRAM                    6181     /run/chrony/chronyd.sock
+unix  2      [ ACC ]     SEQPACKET  LISTENING     1286     /run/udev/control
+unix  2      [ ACC ]     STREAM     LISTENING     1288     /run/udev/io.systemd.Udev
+unix  3      [ ]         STREAM     CONNECTED     2978
+unix  3      [ ]         DGRAM      CONNECTED     7451
+unix  2      [ ]         DGRAM      CONNECTED     7433
+unix  3      [ ]         STREAM     CONNECTED     784      /run/systemd/journal/stdout
+unix  3      [ ]         DGRAM      CONNECTED     6079
+unix  2      [ ]         DGRAM      CONNECTED     4940
+unix  3      [ ]         STREAM     CONNECTED     5253
+unix  3      [ ]         STREAM     CONNECTED     782
+unix  3      [ ]         DGRAM      CONNECTED     7447
+unix  3      [ ]         STREAM     CONNECTED     15258
+unix  2      [ ACC ]     STREAM     LISTENING     1338     /run/systemd/journal/io.systemd.journal
+unix  2      [ ]         DGRAM      CONNECTED     5183
+unix  3      [ ]         STREAM     CONNECTED     4355     /run/dbus/system_bus_socket
+unix  3      [ ]         DGRAM      CONNECTED     7448
+unix  3      [ ]         STREAM     CONNECTED     4286     /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     4377
+unix  3      [ ]         STREAM     CONNECTED     5243
+unix  3      [ ]         STREAM     CONNECTED     15265
+unix  3      [ ]         STREAM     CONNECTED     5252
+unix  3      [ ]         STREAM     CONNECTED     5680     /run/dbus/system_bus_socket
+unix  3      [ ]         DGRAM      CONNECTED     6078
+unix  2      [ ]         DGRAM      CONNECTED     4150
+unix  3      [ ]         STREAM     CONNECTED     2478
+unix  2      [ ]         DGRAM      CONNECTED     717
+unix  2      [ ]         DGRAM      CONNECTED     15259
+unix  2      [ ACC ]     STREAM     LISTENING     978      /run/WSL/442_interop
+unix  3      [ ]         STREAM     CONNECTED     2044     /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     769      
+unix  3      [ ]         STREAM     CONNECTED     5245     /run/dbus/system_bus_socket
+unix  3      [ ]         STREAM     CONNECTED     3798     /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     5239     /run/dbus/system_bus_socket
+unix  3      [ ]         STREAM     CONNECTED     2043
+unix  3      [ ]         STREAM     CONNECTED     5238
+unix  3      [ ]         STREAM     CONNECTED     6165     /run/dbus/system_bus_socket
+unix  3      [ ]         DGRAM      CONNECTED     7446
+unix  3      [ ]         STREAM     CONNECTED     3544
+unix  3      [ ]         STREAM     CONNECTED     3546
+unix  2      [ ACC ]     STREAM     LISTENING     2490     /run/systemd/io.systemd.sysext
+unix  3      [ ]         STREAM     CONNECTED     3552
+unix  3      [ ]         STREAM     CONNECTED     1922     /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     3553
+unix  3      [ ]         STREAM     CONNECTED     4181
+unix  3      [ ]         STREAM     CONNECTED     3543
+unix  2      [ ]         STREAM     CONNECTED     1227
+unix  3      [ ]         STREAM     CONNECTED     9559     /run/user/1000/bus
+unix  3      [ ]         STREAM     CONNECTED     3545
+unix  3      [ ]         DGRAM      CONNECTED     2371
+unix  3      [ ]         SEQPACKET  CONNECTED     6183
+unix  2      [ ]         DGRAM      CONNECTED     2545
+unix  2      [ ]         DGRAM      CONNECTED     9562
+unix  3      [ ]         SEQPACKET  CONNECTED     6182
+unix  3      [ ]         STREAM     CONNECTED     4312     /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     16674    /run/dbus/system_bus_socket
+unix  3      [ ]         DGRAM      CONNECTED     2373
+unix  3      [ ]         STREAM     CONNECTED     4140     /run/systemd/journal/stdout
+unix  3      [ ]         DGRAM      CONNECTED     2372
+unix  3      [ ]         STREAM     CONNECTED     4353
+unix  3      [ ]         STREAM     CONNECTED     2322
+unix  2      [ ]         DGRAM      CONNECTED     6170
+unix  3      [ ]         DGRAM      CONNECTED     2370
+unix  3      [ ]         STREAM     CONNECTED     3801     /run/systemd/journal/stdout
+unix  3      [ ]         DGRAM      CONNECTED     2374
+unix  3      [ ]         STREAM     CONNECTED     2321
+unix  3      [ ]         STREAM     CONNECTED     3790
+unix  2      [ ACC ]     STREAM     LISTENING     8240     /run/WSL/747_interop
+unix  3      [ ]         DGRAM      CONNECTED     2369
+unix  3      [ ]         STREAM     CONNECTED     4352
+unix  3      [ ]         STREAM     CONNECTED     2318
+unix  2      [ ]         DGRAM      CONNECTED     1341
+unix  3      [ ]         STREAM     CONNECTED     4305
+unix  3      [ ]         STREAM     CONNECTED     2317
+unix  2      [ ACC ]     STREAM     LISTENING     4058     /run/apport.socket
+unix  2      [ ]         DGRAM      CONNECTED     1363
+unix  3      [ ]         STREAM     CONNECTED     4139
+unix  2      [ ACC ]     STREAM     LISTENING     4062     /run/dbus/system_bus_socket
+unix  2      [ ]         DGRAM                    3810     @17218964620447063912
+unix  3      [ ]         STREAM     CONNECTED     7453     @d76d7bd2a992ae39/bus/systemd/bus-system
+unix  3      [ ]         STREAM     CONNECTED     1976     @7af14c264cda7833/bus/systemd-logind/system
+unix  3      [ ]         STREAM     CONNECTED     1792     @d19aa09119dca811/bus/systemd-resolve/bus-api-resolve
+unix  3      [ ]         STREAM     CONNECTED     8031     @a020936f4a37a9b4/bus/systemd/bus-api-user
+ell;cwd=/mnt/c/Users/SMD/Documents/Сессия 06.2026/Универ/Универ/4 курс/System_programming_labs/practice-3/3-3
+
+netstat -i
+smd@HOME-PC:/mnt/c/Users/SMD/Documents/Сессия 06.2026/Универ/Универ/4 курс/System_programming_labs/practice-3/3-3$ netstat -i
+Kernel Interface table
+Iface             MTU    RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
+eth0             1500    86140      0      0 0         48132      0      0      0 BMRU
+lo              65536       18      0      0 0            18      0      0      0 LRU
+
+# 4. Lsof для открытых портов
+sudo lsof -i :80
+sudo lsof -i -P -n | grep LISTEN
+smd@HOME-PC:/mnt/c/Users/SMD/Documents/Сессия 06.2026/Универ/Универ/4 курс/System_programming_labs/practice-3/3-3$ sudo lsof -i :80
+smd@HOME-PC:/mnt/c/Users/SMD/Documents/Сессия 06.2026/Универ/Универ/4 курс/System_programming_labs/practice-3/3-3$ sudo lsof -i -P -n | grep LISTEN
+systemd-r  94 systemd-resolve 17u  IPv4   3873      0t0  TCP 127.0.0.53:53 (LISTEN)
+systemd-r  94 systemd-resolve 19u  IPv4   3875      0t0  TCP 127.0.0.54:53 (LISTEN)
+smd@HOME-PC:/mnt/c/Users/SMD/Documents/Сессия 06.2026/Универ/Универ/4 курс/System_programming_labs/practice-3/3-3$ 
+
+# 5. Curl для HTTP запросов
+curl -I https://google.com
+smd@HOME-PC:/mnt/c/Users/SMD/Documents/Сессия 06.2026/Универ/Универ/4 курс/System_programming_labs/practice-3/3-3$ curl -I https://google.com
+HTTP/2 301 
+location: https://www.google.com/
+content-type: text/html; charset=UTF-8
+content-security-policy-report-only: object-src 'none';base-uri 'self';script-src 'nonce-bHT2ZJTjFV5NQ15w4yS92Q' 'strict-dynamic' 'report-sample' 'unsafe-eval' 'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other-hp
+date: Tue, 19 May 2026 12:45:06 GMT
+expires: Thu, 18 Jun 2026 12:45:06 GMT
+cache-control: public, max-age=2592000
+server: gws
+content-length: 220
+x-xss-protection: 0
+x-frame-options: SAMEORIGIN
+alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+
+curl -o /dev/null -s -w "Время соединения: %{time_connect}s\n" https://google.com
+smd@HOME-PC:/mnt/c/Users/SMD/Documents/Сессия 06.2026/Универ/Универ/4 курс/System_programming_labs/practice-3/3-3$ curl -o /dev/null -s -w "Время соединения: %{time_connect}s\n" https://google.com
+Время соединения: 0.002660s
+
+# 6. Netcat для проверки портов
+nc -zv localhost 22
+smd@HOME-PC:/mnt/c/Users/SMD/Documents/Сессия 06.2026/Универ/Универ/4 курс/System_programming_labs/practice-3/3-3$ nc -zv localhost 22
+nc: connect to localhost (127.0.0.1) port 22 (tcp) failed: Connection refused
+nc -zv localhost 80
+smd@HOME-PC:/mnt/c/Users/SMD/Documents/Сессия 06.2026/Универ/Универ/4 курс/System_programming_labs/practice-3/3-3$ nc -zv localhost 80
+nc: connect to localhost (127.0.0.1) port 80 (tcp) failed: Connection refused
+nc -zv localhost 8080
+smd@HOME-PC:/mnt/c/Users/SMD/Documents/Сессия 06.2026/Универ/Универ/4 курс/System_programming_labs/practice-3/3-3$ nc -zv localhost 8080
+nc: connect to localhost (127.0.0.1) port 8080 (tcp) failed: Connection refused
+# Пример результатов выполнения (для localhost)
+# Пример результатов для eth0
+smd@HOME-PC:/mnt/c/Users/SMD/Documents/Сессия 06.2026/Универ/Универ/4 курс/System_programming_labs/practice-3/3-3$ nc -zv 142.251.13.102 80
+Connection to 142.251.13.102 80 port [tcp/http] succeeded!
